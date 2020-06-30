@@ -2,6 +2,7 @@ package com.android.memo.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "memo")
 data class Memo(
@@ -13,4 +14,4 @@ data class Memo(
     var date: String,
     var isChecked: Boolean = false
 
-)
+):Serializable

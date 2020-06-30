@@ -16,8 +16,9 @@ import com.android.memo.data.Memo
 import com.android.memo.util.getString
 import com.android.memo.util.ploadImg
 import kotlinx.android.synthetic.main.activity_memo.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.anko.toast
 import java.io.File
 import java.text.SimpleDateFormat
@@ -63,7 +64,7 @@ class MemoActivity : AppCompatActivity() {
 
     fun onClick(v: View) {
         when (v.id) {
-//            R.id.edit_toolbar_save_btn -> saveMemo()
+            R.id.edit_toolbar_save_btn -> saveMemo(id)
             R.id.camera_btn -> sendTakePhotoIntent()
             R.id.gallery_btn -> getPhoto()
             R.id.edit_toolbar_back_btn -> finish()
@@ -95,15 +96,19 @@ class MemoActivity : AppCompatActivity() {
     }
 
     private fun insertMemo(memo: Memo) {
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
 
-        runBlocking {
             val insert = launch {
                 db.memoDao().insertMemo(memo)
             }
             insert.join()
-            toast("저장이 완료 되었습니다.")
+            CoroutineScope(Dispatchers.Main).launch {
+                toast("저장이 완료 되었습니다.")
+                finish()
+            }
+
         }
-        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
