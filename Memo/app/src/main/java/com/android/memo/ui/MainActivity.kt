@@ -1,13 +1,11 @@
 package com.android.memo.ui
 
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.memo.AppDatabase
 import com.android.memo.R
 import com.android.memo.data.Memo
+import com.android.memo.service.NotificationService
 import com.android.memo.ui.adapter.MemoAdapter
 import com.android.memo.util.Const.MULTIPLE_PERMISSIONS_CODE
 import com.android.memo.util.Const.requiredPermissions
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel()
+
 
         db = AppDatabase.getInstance(this)!!
 
@@ -114,10 +113,24 @@ class MainActivity : AppCompatActivity() {
             val update = launch { db.memoDao().insertMemo(memo) }
             update.join()
             CoroutineScope(Dispatchers.Main).launch {
-                if (memo.isChecked)
-                    showCustomLayoutNotification(memo)
-                else notificationManager.cancelAll()
-                Log.d(TAG, "전: ${memo.isChecked}")
+                if (memo.isChecked) {
+                    /*val intent = Intent(applicationContext, NotificationService::class.java)
+                    intent.putExtra("memo", memo)*/
+                    startService<NotificationService>(
+                        "memo" to memo,
+                        "isCancel" to "no"
+                    )
+//                    startService(intent)
+                } else {
+//                    val intent = Intent(applicationContext, NotificationService::class.java)
+                    startService<NotificationService>(
+                        "memo" to memo,
+                        "isCancel" to "yes"
+                    )
+                    /*intent.putExtra("isCancel", "yes")
+                    startService(intent)*/
+                }
+
             }
 
         }
@@ -125,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun showCustomLayoutNotification(memo: Memo) {
+  /*  private fun showCustomLayoutNotification(memo: Memo) {
 
         val contentView = RemoteViews(packageName, R.layout.activity_memo_notify)
 
@@ -139,13 +152,14 @@ class MainActivity : AppCompatActivity() {
             .setContentText(memo.content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val notification = builder.build();
-        notification.flags = Notification.FLAG_AUTO_CANCEL
-
+        val notification = builder.build()
+//        notification.flags = Notification.FLAG_AUTO_CANCEL
+        notification.flags = Notification.FLAG_NO_CLEAR
         notificationManager.notify(1, notification)
-    }
 
-    private fun createNotificationChannel() {
+    }
+*/
+    /*private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "mychannel"
             val description = "mymemo"
@@ -156,7 +170,7 @@ class MainActivity : AppCompatActivity() {
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
-    }
+    }*/
 
 
     // 권한 체크
