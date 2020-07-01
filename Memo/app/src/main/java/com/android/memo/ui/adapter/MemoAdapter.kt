@@ -29,6 +29,11 @@ class MemoAdapter(
                 titleTv.text = memo.title
                 contentTv.text = memo.content
                 dateTv.text = memo.date
+                if (memo.isChecked) {
+                    checkIb.setImageResource(R.drawable.checked_star)
+                } else {
+                    checkIb.setImageResource(R.drawable.unchecked_star)
+                }
                 if (memo.image.isNullOrEmpty()) {
                     imageIv.ploadImg(memo.image)
                 }
@@ -49,10 +54,6 @@ class MemoAdapter(
                     val pos = adapterPosition
                     if (pos != RecyclerView.NO_POSITION) {
                         mListener?.onCheckClick(v, pos)
-                        if (memo.isChecked)
-                            checkIb.setImageResource(R.drawable.unchecked_star)
-                        else
-                            checkIb.setImageResource(R.drawable.checked_star)
                     }
                 }
             }

@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
     private fun UpdateMemo(memo: Memo) {
         val memo = memo
         memo.isChecked = !memo.isChecked
-        Log.d(TAG, "전: ${memo.isChecked}")
+
         val scope = CoroutineScope(Dispatchers.Default)
         scope.launch {
             val update = launch { db.memoDao().insertMemo(memo) }
@@ -117,9 +117,7 @@ class MainActivity : AppCompatActivity() {
                 if (memo.isChecked)
                     showCustomLayoutNotification(memo)
                 else notificationManager.cancelAll()
-                
-                Log.d(TAG, "후: ${memo.isChecked}")
-
+                Log.d(TAG, "전: ${memo.isChecked}")
             }
 
         }
