@@ -4,7 +4,6 @@ import android.app.*
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -46,8 +45,13 @@ class NotificationService : Service() {
         contentView.setTextViewText(R.id.text, "This is a custom layout")
 
         val memo = intent!!.getSerializableExtra("memo") as Memo
-        val intent =  Intent(applicationContext, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.checked_star)
             .setContentTitle(memo.title)
@@ -60,20 +64,15 @@ class NotificationService : Service() {
         notification.flags = Notification.FLAG_AUTO_CANCEL
         notificationManager.notify(memo.id, notification)
 
-        startForeground(memo.id,notification)
+        startForeground(memo.id, notification)
 
-        if (intent!!.getStringExtra("isCancel") == "yes")
-            {
+        if (intent!!.getStringExtra("isCancel") == "yes") {
             notificationManager.cancelAll()
-}
-
-
-
+        }
         return START_STICKY
     }
 
     companion object {
-        private const val TAG = "NotificationService.kt"
         private const val CHANNEL_ID = "checkedmemo"
     }
 }
