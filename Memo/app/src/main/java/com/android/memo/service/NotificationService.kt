@@ -46,28 +46,28 @@ class NotificationService : Service() {
         contentView.setTextViewText(R.id.text, "This is a custom layout")
 
         val memo = intent!!.getSerializableExtra("memo") as Memo
-
+        val intent =  Intent(applicationContext, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.checked_star)
             .setContentTitle(memo.title)
             .setContentText(memo.content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
 
         val notification = builder.build()
 
         notification.flags = Notification.FLAG_AUTO_CANCEL
-        notificationManager.notify(1, notification)
+        notificationManager.notify(memo.id, notification)
 
-        startForeground(1,notification)
+        startForeground(memo.id,notification)
 
         if (intent!!.getStringExtra("isCancel") == "yes")
             {
-                // 수정 필요
             notificationManager.cancelAll()
 }
-        /*val intent =  Intent(applicationContext, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT)
-        pendingIntent.send()*/
+
+
 
         return START_STICKY
     }

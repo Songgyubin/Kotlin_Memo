@@ -1,16 +1,12 @@
 package com.android.memo.ui
 
-import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -114,21 +110,12 @@ class MainActivity : AppCompatActivity() {
             update.join()
             CoroutineScope(Dispatchers.Main).launch {
                 if (memo.isChecked) {
-                    /*val intent = Intent(applicationContext, NotificationService::class.java)
-                    intent.putExtra("memo", memo)*/
                     startService<NotificationService>(
                         "memo" to memo,
                         "isCancel" to "no"
                     )
-//                    startService(intent)
                 } else {
-//                    val intent = Intent(applicationContext, NotificationService::class.java)
-                    startService<NotificationService>(
-                        "memo" to memo,
-                        "isCancel" to "yes"
-                    )
-                    /*intent.putExtra("isCancel", "yes")
-                    startService(intent)*/
+                    stopService<NotificationService>()
                 }
 
             }
@@ -137,41 +124,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-  /*  private fun showCustomLayoutNotification(memo: Memo) {
-
-        val contentView = RemoteViews(packageName, R.layout.activity_memo_notify)
-
-        contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher)
-        contentView.setTextViewText(R.id.title, "Custom notification")
-        contentView.setTextViewText(R.id.text, "This is a custom layout")
-
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.checked_star)
-            .setContentTitle(memo.title)
-            .setContentText(memo.content)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-
-        val notification = builder.build()
-//        notification.flags = Notification.FLAG_AUTO_CANCEL
-        notification.flags = Notification.FLAG_NO_CLEAR
-        notificationManager.notify(1, notification)
-
-    }
-*/
-    /*private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "mychannel"
-            val description = "mymemo"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-
-            val channel = NotificationChannel(CHANNEL_ID, name, importance)
-            channel.description = description
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
-        }
-    }*/
-
 
     // 권한 체크
     private fun checkPermissions() {
