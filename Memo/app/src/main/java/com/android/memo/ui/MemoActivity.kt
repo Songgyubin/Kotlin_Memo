@@ -15,7 +15,7 @@ import com.android.memo.R
 import com.android.memo.data.Memo
 import com.android.memo.util.getString
 import com.android.memo.util.ploadImg
-import kotlinx.android.synthetic.main.activity_memo.*
+import kotlinx.android.synthetic.main.activity_memo_edit.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,8 +28,6 @@ import java.util.*
 class MemoActivity : AppCompatActivity() {
 
     lateinit var db: AppDatabase
-
-
     lateinit var imageFilePath: String
     lateinit var photoUri: Uri
 
@@ -41,7 +39,7 @@ class MemoActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_memo)
+        setContentView(R.layout.activity_memo_edit)
 
         type = intent.getStringExtra("type")
 

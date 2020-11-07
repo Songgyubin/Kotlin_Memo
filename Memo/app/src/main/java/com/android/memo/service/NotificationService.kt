@@ -9,7 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.android.memo.R
 import com.android.memo.data.Memo
-import com.android.memo.ui.MainActivity
+import com.android.memo.ui.MemoListActivity
 
 class NotificationService : Service() {
 
@@ -45,7 +45,7 @@ class NotificationService : Service() {
         contentView.setTextViewText(R.id.text, "This is a custom layout")
 
         val memo = intent!!.getSerializableExtra("memo") as Memo
-        val intent = Intent(applicationContext, MainActivity::class.java)
+        val intent = Intent(applicationContext, MemoListActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,
             0,

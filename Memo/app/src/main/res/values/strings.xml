@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">갤러리메모</string>
     <string name="channel_name">mychannel</string>
     <string name="channel_description">mymemo</string>
+    <string name="notUser">회원이 아니에요</string>
+    <string name="user">회원이에요</string>
 </resources>
